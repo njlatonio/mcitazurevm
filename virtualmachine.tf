@@ -40,16 +40,18 @@ resource "azurerm_virtual_network" "main" {
 }
 
 resource "azurerm_subnet" "internal" {
+  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
   name                 = "internal"
-  resource_group_name  = azurerm_resource_group.example.name
-  virtual_network_name = azurerm_virtual_network.main.name
+  resource_group_name  = azurerm_resource_group.example[each.value.name]
+  virtual_network_name = azurerm_virtual_network.main.[each.value.name]
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_network_interface" "main" {
+  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
   name                = "nic"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example[each.value.location]
+  resource_group_name = azurerm_resource_group.example[each.value.name]
 
   ip_configuration {
     name                          = "testconfiguration1"
