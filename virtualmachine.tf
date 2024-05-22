@@ -25,9 +25,9 @@ locals{
 
 
 resource "azurerm_resource_group" "example" {
-  #for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
-  name     = local.azurevmlist_Q13.name
-  location = local.azurevmlist_Q13.location
+  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
+  name     = each.value.name
+  location = each.value.location
 }
 
 resource "azurerm_virtual_network" "main" {
@@ -85,8 +85,8 @@ resource "azurerm_virtual_machine" "main" {
   }
   os_profile {
     computer_name  = "hostname"
-    admin_username = "testadmin"
-    admin_password = "Password1234!"
+    admin_username = var.admin_username
+    admin_password = var.admin_password
   }
   os_profile_linux_config {
     disable_password_authentication = false
@@ -126,8 +126,8 @@ resource "azurerm_virtual_machine" "main_yaml" {
   }
   os_profile {
     computer_name  = "hostname"
-    admin_username = "testadmin"
-    admin_password = "Password1234!"
+    admin_username = var.admin_username
+    admin_password = var.admin_password
   }
   os_profile_linux_config {
     disable_password_authentication = false
