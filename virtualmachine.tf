@@ -43,7 +43,7 @@ resource "azurerm_subnet" "internal" {
   for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.example[each.value.name]
-  virtual_network_name = azurerm_virtual_network.main.[each.value.name]
+  virtual_network_name = azurerm_virtual_network.main[each.value.name]
   address_prefixes     = ["10.0.2.0/24"]
 }
 
