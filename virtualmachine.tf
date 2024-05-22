@@ -25,16 +25,16 @@ locals{
 
 
 resource "azurerm_resource_group" "example" {
-  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
-  name     = each.value.name
-  location = each.value.location
+  #for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
+  name     = local.azurevmlist_Q13.name
+  location = local.azurevmlist_Q13.location
 }
 
 resource "azurerm_virtual_network" "main" {
   name                = "network"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.example[location]
-  resource_group_name = azurerm_resource_group.example[name]
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
 }
 
 resource "azurerm_subnet" "internal" {
