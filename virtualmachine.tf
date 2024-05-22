@@ -11,19 +11,27 @@ locals{
       }
     ]
 ])
+
+  #Question 13
+  azurevmlist_Q13 = flatten([
+   for app in local.azurevmconfig : [
+     for azurevm in try(app.resourcegroupconfiguration, []) :{
+      name=azurevm.name
+      location=azurevm.location
+      }
+    ]
+])
 }
 
-variable "prefix" {
-  default = "tfvmex"
-}
 
 resource "azurerm_resource_group" "example" {
-  name     = "${var.prefix}-resources"
-  location = "West Europe"
+  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
+  name     = each.value.name
+  location = each.value.location
 }
 
 resource "azurerm_virtual_network" "main" {
-  name                = "${var.prefix}-network"
+  name                = "network"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
@@ -37,7 +45,7 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic"
+  name                = "nic"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
 
@@ -51,7 +59,7 @@ resource "azurerm_network_interface" "main" {
 #Question 11
 resource "azurerm_virtual_machine" "main" {
   for_each              = {for machine in local.vm_names: machine=>machine}
-  name                  = "${var.prefix}-vm"
+  name                  = "vm"
   location              = azurerm_resource_group.example.location
   resource_group_name   = azurerm_resource_group.example.name
   network_interface_ids = [azurerm_network_interface.main.id]
@@ -92,7 +100,7 @@ resource "azurerm_virtual_machine" "main" {
 #Question 12 - via yaml
 resource "azurerm_virtual_machine" "main_yaml" {
   for_each              = {for value in local.azurevmlist: "${value.name}"=>value}
-  name                  = "${var.prefix}-vm"
+  name                  = each.value.name
   location              = azurerm_resource_group.example.location
   resource_group_name   = azurerm_resource_group.example.name
   network_interface_ids = [azurerm_network_interface.main.id]
