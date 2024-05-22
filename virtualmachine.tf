@@ -32,6 +32,7 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_virtual_network" "main" {
+  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
   name                = "network"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.example[each.value.location]
