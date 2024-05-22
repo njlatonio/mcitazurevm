@@ -33,8 +33,8 @@ resource "azurerm_resource_group" "example" {
 resource "azurerm_virtual_network" "main" {
   name                = "network"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example[each.location]
+  resource_group_name = azurerm_resource_group.example[each.name]
 }
 
 resource "azurerm_subnet" "internal" {
