@@ -13,7 +13,7 @@ locals{
 ])
 
   #Question 13
-  azurevmconfig_Q13=[for f in fileset("${path.module}/vmfolder", "[^_]*.yaml") : yamldecode(file("${path.module}/vmfolder/${f}"))]
+  azurevmconfig_Q13=[for f in fileset("${path.module}/vmfolder_Q13", "[^_]*.yaml") : yamldecode(file("${path.module}/vmfolder_Q13/${f}"))]
   azurevmlist_Q13 = flatten([
    for app in local.azurevmconfig_Q13 : [
      for azurevm in try(app.resourcegroupconfiguration, []) :{
