@@ -90,7 +90,7 @@ resource "azurerm_virtual_machine" "main" {
 
 
 #Question 12 - via yaml
-resource "azurerm_virtual_machine" "main" {
+resource "azurerm_virtual_machine" "main_yaml" {
   for_each              = {for value in local.azurevmlist: "${value.name}"=>value}
   name                  = "${var.prefix}-vm"
   location              = azurerm_resource_group.example.location
