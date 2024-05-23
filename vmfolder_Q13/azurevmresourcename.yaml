@@ -1,5 +1,3 @@
 resourcegroupconfiguration:
   - name: MCITresources
     location: West Europe
-  - name: MCITresources2
-    location: Canada Central
