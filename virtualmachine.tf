@@ -1,4 +1,3 @@
-/*
 locals{
   #Question 11
   vm_names=["firstvm","secondvm","thirdvm","fourthvm","fifthvm"]
@@ -128,4 +127,4 @@ resource "azurerm_virtual_machine" "main_yaml" {
     environment = "staging"
   }
 }
-*/
+
