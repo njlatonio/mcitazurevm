@@ -26,9 +26,10 @@ locals{
 
 
 resource "azurerm_resource_group" "example" {
-  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
-  name     = each.value.name
-  location = each.value.location
+#  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
+  name     = local.azurevmlist_Q13.name
+  location = local.azurevmlist_Q13.location
+}
 
 resource "azurerm_virtual_network" "main" {
   name                = "network"
@@ -57,7 +58,7 @@ resource "azurerm_network_interface" "main" {
     private_ip_address_allocation = "Dynamic"
   }
 }
-}
+
 /*
 resource "azurerm_resource_group" "example" {
   name     = "resources"
