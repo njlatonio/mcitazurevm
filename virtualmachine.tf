@@ -14,14 +14,13 @@ locals{
 
   #Question 13
   azurevmconfig_Q13=[for f in fileset("${path.module}/vmfolder_Q13", "[^_]*.yaml") : yamldecode(file("${path.module}/vmfolder_Q13/${f}"))]
-  azurevmlist_Q13 = flatten([
-   for app in local.azurevmconfig_Q13 : [
-     for azurevm in try(app.resourcegroupconfiguration, []) :{
+  azurevmlist_Q13 = [
+   for azurevm in local.azurevmconfig_Q13.resourcegroupconfiguration : {
       name=azurevm.name
       location=azurevm.location
       }
-    ]
-])
+  ]
+
 }
 
 
@@ -31,30 +30,27 @@ resource "azurerm_resource_group" "example" {
   location = each.value.location
 }
 
+
 resource "azurerm_virtual_network" "main" {
-  for_each            = azurerm_resource_group.example
   name                = "network"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.azureresourcegroup.location
-  resource_group_name = azurerm_resource_group.azureresourcegroup.name
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
 }
 
 resource "azurerm_subnet" "internal" {
-  for_each             = azurerm_virtual_network.main
   name                 = "internal"
-  resource_group_name  = azurerm_resource_group.azureresourcegroup.name
-  virtual_network_name = azurerm_virtual_network.mainazureresourcegroup.name
+  resource_group_name  = azurerm_resource_group.example.name
+  virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_network_interface" "main" {
-  for_each            = azurerm_resourcegroup.example
   name                = "nic"
-  location            = azurerm_resource_group.azureresourcegroup.location
-  resource_group_name = azurerm_resource_group.azureresourcegroup.name
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
 
   ip_configuration {
-    for_each                      = azurerm_resourcegroup.example
     name                          = "testconfiguration1"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
