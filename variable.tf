@@ -55,7 +55,7 @@ variable "offer"{
 variable "sku"{
   type=string
 }
-variable "version"{
+variable "storage_image_reference_version"{
   type=string
 }
 variable "storage_os_disk_name"{
