@@ -5,6 +5,3 @@ azurevmconfiguration:
 - name: ninthvm
 - name: tenthvm
 
-resourcegroupconfiguration:
-- name: MCITresources
-  location: West Europe
