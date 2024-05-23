@@ -35,23 +35,23 @@ resource "azurerm_virtual_network" "main" {
   for_each            = azurerm_resource_group.example
   name                = "network"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.azureresourcegroup.location
+  resource_group_name = azurerm_resource_group.azureresourcegroup.name
 }
 
 resource "azurerm_subnet" "internal" {
   for_each             = azurerm_virtual_network.main
   name                 = "internal"
-  resource_group_name  = azurerm_resource_group.example.name
-  virtual_network_name = azurerm_virtual_network.main.name
+  resource_group_name  = azurerm_resource_group.azureresourcegroup.name
+  virtual_network_name = azurerm_virtual_network.mainazureresourcegroup.name
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_network_interface" "main" {
   for_each            = azurerm_resourcegroup.example
   name                = "nic"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.azureresourcegroup.location
+  resource_group_name = azurerm_resource_group.azureresourcegroup.name
 
   ip_configuration {
     for_each                      = azurerm_resourcegroup.example
