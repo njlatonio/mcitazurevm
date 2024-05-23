@@ -32,7 +32,7 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_virtual_network" "main" {
-  for_each            = azurerm_resourcegroup.example
+  for_each            = azurerm_resource_group.example
   name                = "network"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.example.location
