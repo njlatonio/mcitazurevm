@@ -50,7 +50,7 @@ resource "azurerm_network_interface" "main" {
 #Question 11
 resource "azurerm_virtual_machine" "main" {
   for_each              = {for machine in local.vm_names: machine=>machine}
-  name                  = "resources"
+  name                  = var.name
   location              = azurerm_resource_group.example.location
   resource_group_name   = azurerm_resource_group.example.name
   network_interface_ids = [azurerm_network_interface.main.id]
