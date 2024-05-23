@@ -15,7 +15,7 @@ locals{
   #Question 13
   azurevmconfig_Q13=[for f in fileset("${path.module}/vmfolder_Q13", "[^_]*.yaml") : yamldecode(file("${path.module}/vmfolder_Q13/${f}"))]
   azurevmlist_Q13 = [
-   for azurevm in local.azurevmconfig_Q13.resourcegroupconfiguration : {
+   for azurevm in local.azurevmconfig_Q13.rgconfig : {
       name=azurevm.name
       location=azurevm.location
       }
