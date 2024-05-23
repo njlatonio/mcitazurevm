@@ -26,12 +26,13 @@ locals{
 
 
 resource "azurerm_resource_group" "example" {
-#  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
-  name     = local.azurevmlist_Q13.name
-  location = local.azurevmlist_Q13.location
+  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
+  name     = each.value.name
+  location = each.value.location
 }
 
 resource "azurerm_virtual_network" "main" {
+  for_each            = azurerm_resourcegroup.example
   name                = "network"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.example.location
@@ -39,7 +40,7 @@ resource "azurerm_virtual_network" "main" {
 }
 
 resource "azurerm_subnet" "internal" {
-  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
+  for_each             = azurerm_resourcegroup.example
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.example.name
   virtual_network_name = azurerm_virtual_network.main.name
@@ -47,12 +48,13 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_network_interface" "main" {
-  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
+  for_each            = azurerm_resourcegroup.example
   name                = "nic"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
 
   ip_configuration {
+    for_each                      = azurerm_resourcegroup.example
     name                          = "testconfiguration1"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
