@@ -25,7 +25,7 @@ locals{
 
 
 resource "azurerm_resource_group" "example" {
-  for_each = {for value in local.azurevmlist_Q13: "${value.name}"=>value}
+  for_each = {for value in local.azurevmlist_Q13: value.name=>value}
   name     = each.value.name
   location = each.value.location
 }
