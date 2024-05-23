@@ -60,7 +60,7 @@ resource "azurerm_virtual_machine" "main" {
     publisher = var.publisher
     offer     = var.offer
     sku       = var.sku
-    version   = var.version
+    version   = var.storage_image_reference_version
   }
   storage_os_disk {
     name              = var.storage_os_disk_name
@@ -101,7 +101,7 @@ resource "azurerm_virtual_machine" "main_yaml" {
     publisher = var.publisher
     offer     = var.offer
     sku       = var.sku
-    version   = var.version
+    version   = var.storage_image_reference_version
   }
   storage_os_disk {
     name              = var.storage_os_disk_name
