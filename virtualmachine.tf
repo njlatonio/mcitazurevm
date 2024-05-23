@@ -60,6 +60,11 @@ resource "azurerm_network_interface" "main" {
   }
 }
 
+/*
+resource "azurerm_resource_group" "example" {
+  name     = "resources"
+  location = "West Europe"
+}
 #Question 11
 resource "azurerm_virtual_machine" "main" {
   for_each              = {for machine in local.vm_names: machine=>machine}
@@ -140,3 +145,4 @@ resource "azurerm_virtual_machine" "main_yaml" {
     environment = "staging"
   }
 }
+*/
